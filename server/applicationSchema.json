@@ -1,0 +1,47 @@
+{
+    "title": "application",
+    "required": [
+        "_id",
+        "company",
+        "title",
+        "link",
+        "dateApplied",
+        "dateUpdated",
+        "status"
+    ],
+    "properties": {
+        "_id": {
+            "bsonType": "objectId"
+        },
+        "company": {
+            "bsonType": "string"
+        },
+        "title": {
+            "bsonType": "string"
+        },
+        "link": {
+            "bsonType": "string"
+        },
+        "dateApplied": {
+            "bsonType": "string"
+        },
+        "dateUpdated": {
+            "bsonType": "string"
+        },
+        "status": {
+            "bsonType": "string"
+        },
+        "notes": {
+            "bsonType": "string"
+        },
+        "interviewStage": {
+            "bsonType": "string"
+        },
+        "interviewLink": {
+            "bsonType": "string"
+        },
+        "interviewDate": {
+            "bsonType": "string"
+        }
+    }
+}
