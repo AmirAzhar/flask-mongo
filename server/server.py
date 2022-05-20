@@ -1,4 +1,5 @@
 from flask import Flask, Response, request
+from flask_cors import CORS, cross_origin
 from bson.objectid import ObjectId
 from datetime import date
 import pymongo
@@ -6,6 +7,7 @@ import json
 
 ################################################################
 app = Flask(__name__)
+CORS(app)
 
 try:
     mongo = pymongo.MongoClient(
