@@ -13,7 +13,7 @@ function Kanban() {
   };
 
   useEffect(() => {
-    fetch("/api/applications")
+    fetch("/api/jobs")
       .then((res) => res.json())
       .then((res) => {
         setJobs(res["data"]);

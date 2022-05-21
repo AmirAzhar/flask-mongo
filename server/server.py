@@ -21,9 +21,10 @@ except:
 ################################################################
 
 # Create a new job application
-@app.route("/api/applications", methods=["POST"])
-def createNewApplication():
+@app.route("/api/jobs/apply", methods=["POST"])
+def createJob():
     try:
+        data = list(db.jobs.find({"status": "APPLIED"}))
         app = {
             "company": request.form["company"],
             "title": request.form["title"],
@@ -31,12 +32,13 @@ def createNewApplication():
             "dateApplied": date.today().strftime("%d/%m/%Y"),
             "dateUpdated": date.today().strftime("%d/%m/%Y"),
             "status": "APPLIED",
+            "index": len(data),
         }
-        dbResponse = db.applications.insert_one(app)
+        dbResponse = db.jobs.insert_one(app)
         return Response(
             response=json.dumps(
                 {
-                    "message": "Application created successfully.",
+                    "message": "Job created successfully.",
                     "id": f"{dbResponse.inserted_id}",
                 }
             ),
@@ -47,40 +49,67 @@ def createNewApplication():
         print(e)
 
 
-# Get all job applications
-@app.route("/api/applications", methods=["GET"])
-def getApplications():
+# Get all job jobs
+@app.route("/api/jobs/all", methods=["GET"])
+def getAllJobs():
     try:
-        data = list(db.applications.find())
-        columns = {}
-        columnOrder = ["APPLIED", "INTERVIEW", "OFFER", "REJECTED"]
-        for app in data:
-            app["_id"] = str(app["_id"])
-            if app["status"] in columns:
-                columns[app["status"]].append(app)
-            else:
-                columns[app["status"]] = [app]
+        jobs = {}
+        for job in list(db.jobs.find()):
+            job["_id"] = str(job["_id"])
+            jobs[job["_id"]] = job
+
         return Response(
-            response=json.dumps(
-                {"data": data, "columns": columns, "columnOrder": columnOrder}
-            ),
+            response=json.dumps(jobs),
             status=200,
             mimetype="application/json",
         )
     except Exception as e:
         print(e)
         return Response(
-            response=json.dumps({"message": "Cannot retrieve applications."}),
+            response=json.dumps({"message": "Cannot retrieve jobs."}),
+            status=500,
+            mimetype="application/json",
+        )
+
+
+# Get all jobs listed by columns and get column order
+@app.route("/api/jobs/columns", methods=["GET"])
+def getJobsColumns():
+    try:
+        columns = {
+            "APPLIED": {"id": "APPLIED", "jobs": []},
+            "INTERVIEW": {"id": "INTERVIEW", "jobs": []},
+            "OFFER": {"id": "OFFER", "jobs": []},
+            "REJECTED": {"id": "REJECTED", "jobs": []},
+        }
+        columnOrder = ["APPLIED", "INTERVIEW", "OFFER", "REJECTED"]
+
+        for job in list(db.jobs.find()):
+            job["_id"] = str(job["_id"])
+            columns[job["status"]]["jobs"].append((job["index"], job["_id"]))
+
+        for col in columns:
+            columns[col]["jobs"].sort(key=lambda tup: tup[1])
+
+        return Response(
+            response=json.dumps({"columns": columns, "columnOrder": columnOrder}),
+            status=200,
+            mimetype="application/json",
+        )
+    except Exception as e:
+        print(e)
+        return Response(
+            response=json.dumps({"message": "Cannot retrieve jobs columns."}),
             status=500,
             mimetype="application/json",
         )
 
 
 # Update a single job application
-@app.route("/api/applications/<id>", methods=["PATCH"])
-def updateApplication(id):
+@app.route("/api/jobs/<id>", methods=["PATCH"])
+def updateJob(id):
     try:
-        dbResponse = db.applications.update_one(
+        dbResponse = db.jobs.update_one(
             {"_id": ObjectId(id)},
             {
                 "$set": {
@@ -92,7 +121,7 @@ def updateApplication(id):
         return Response(
             response=json.dumps(
                 {
-                    "message": "Application successfully updated.",
+                    "message": "Job successfully updated.",
                     "id": f"{id}",
                 }
             ),
@@ -102,21 +131,21 @@ def updateApplication(id):
     except Exception as e:
         print(e)
         return Response(
-            response=json.dumps({"message": "Cannot update application."}),
+            response=json.dumps({"message": "Cannot update job."}),
             status=500,
             mimetype="application/json",
         )
 
 
 # Delete a job application
-@app.route("/api/applications/<id>", methods=["DELETE"])
+@app.route("/api/jobs/<id>", methods=["DELETE"])
 def deleteApplication(id):
     try:
-        dbResponse = db.applications.delete_one({"_id": ObjectId(id)})
+        dbResponse = db.jobs.delete_one({"_id": ObjectId(id)})
         return Response(
             response=json.dumps(
                 {
-                    "message": "Application deleted successfully.",
+                    "message": "Job deleted successfully.",
                     "id": f"{id}",
                 }
             ),
@@ -126,7 +155,7 @@ def deleteApplication(id):
     except Exception as e:
         print(e)
         return Response(
-            response=json.dumps({"message": "Cannot delete application."}),
+            response=json.dumps({"message": "Cannot delete job."}),
             status=500,
             mimetype="application/json",
         )
