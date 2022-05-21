@@ -6,10 +6,13 @@ function Column({ title, jobs }) {
     <div>
       <div className="text-center text-lg font-bold p-2 ">{title}</div>
       <Droppable droppableId={title}>
-        {(provided) => (
+        {(provided, snapshot) => (
           <div
-            className="border-gray-300 border-2 w-80 p-2 rounded-lg"
+            className={`border-gray-300 border-2 w-80 p-2 rounded-lg transition ease-in-out ${
+              snapshot.isDraggingOver ? "bg-gray-200" : "bg-white"
+            }`}
             ref={provided.innerRef}
+            isDraggingOver={snapshot.isDraggingOver}
             {...provided.droppableProps}
           >
             {provided.placeholder}
