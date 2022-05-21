@@ -52,10 +52,15 @@ def createNewApplication():
 def getApplications():
     try:
         data = list(db.applications.find())
+        columns = {}
         for app in data:
             app["_id"] = str(app["_id"])
+            if app["status"] in columns:
+                columns[app["status"]].push(app)
+            else:
+                columns[app["status"]] = [app]
         return Response(
-            response=json.dumps(data),
+            response=json.dumps({"data": data, "columns": columns}),
             status=200,
             mimetype="application/json",
         )
