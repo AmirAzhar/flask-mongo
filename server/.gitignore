@@ -1,3 +1,7 @@
 # Byte-compiled / optimized / DLL files
 /__pycache__
+[Ii]nclude
+[Ll]ib
 *.py[cod]
+[Ss]cripts
+pyvenv.cfg
