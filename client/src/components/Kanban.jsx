@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { DragDropContext } from "react-beautiful-dnd";
 
 import Column from "./Column";
 
@@ -6,6 +7,10 @@ function Kanban() {
   const [jobs, setJobs] = useState([]);
   const [columns, setColumns] = useState([]);
   const [columnOrder, setColumnOrder] = useState([]);
+
+  const onDragEnd = (result) => {
+    console.log(result);
+  };
 
   useEffect(() => {
     fetch("/api/applications")
@@ -18,12 +23,14 @@ function Kanban() {
   }, []);
 
   return (
-    <div>
-      {columnOrder.map((columnId) => {
-        const jobs = columns[columnId];
-        return <Column key={columnId} title={columnId} jobs={jobs} />;
-      })}
-    </div>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div className="flex justify-evenly m-5">
+        {columnOrder.map((columnId) => {
+          const jobs = columns[columnId];
+          return <Column key={columnId} title={columnId} jobs={jobs} />;
+        })}
+      </div>
+    </DragDropContext>
   );
 }
 
