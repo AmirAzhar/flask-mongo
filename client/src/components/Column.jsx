@@ -1,11 +1,11 @@
 import { Droppable } from "react-beautiful-dnd";
 import Job from "./Job";
 
-function Column({ title, jobs }) {
+function Column({ column, jobs }) {
   return (
     <div>
-      <div className="text-center text-lg font-bold p-2 ">{title}</div>
-      <Droppable droppableId={title}>
+      <div className="text-center text-lg font-bold p-2 ">{column["id"]}</div>
+      <Droppable droppableId={column["id"]}>
         {(provided, snapshot) => (
           <div
             className={`border-gray-300 border-2 w-80 p-2 rounded-lg transition ease-in-out ${

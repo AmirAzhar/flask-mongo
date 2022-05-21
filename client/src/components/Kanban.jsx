@@ -4,8 +4,8 @@ import { DragDropContext } from "react-beautiful-dnd";
 import Column from "./Column";
 
 function Kanban() {
-  const [jobs, setJobs] = useState([]);
-  const [columns, setColumns] = useState([]);
+  const [jobs, setJobs] = useState({});
+  const [columns, setColumns] = useState({});
   const [columnOrder, setColumnOrder] = useState([]);
 
   const onDragEnd = (result) => {
@@ -13,12 +13,16 @@ function Kanban() {
   };
 
   useEffect(() => {
-    fetch("/api/jobs")
+    fetch("/api/jobs/all")
       .then((res) => res.json())
-      .then((res) => {
-        setJobs(res["data"]);
-        setColumns(res["columns"]);
-        setColumnOrder(res["columnOrder"]);
+      .then((data) => {
+        setJobs(data["jobs"]);
+      });
+    fetch("/api/jobs/columns")
+      .then((res) => res.json())
+      .then((data) => {
+        setColumns(data["columns"]);
+        setColumnOrder(data["columnOrder"]);
       });
   }, []);
 
@@ -26,8 +30,10 @@ function Kanban() {
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="flex justify-evenly m-5">
         {columnOrder.map((columnId) => {
-          const jobs = columns[columnId];
-          return <Column key={columnId} title={columnId} jobs={jobs} />;
+          console.log(jobs);
+          const column = columns[columnId];
+          const colJobs = column["jobs"].map((jobsId) => jobs[jobsId[1]]);
+          return <Column key={column["id"]} column={column} jobs={colJobs} />;
         })}
       </div>
     </DragDropContext>

@@ -59,7 +59,7 @@ def getAllJobs():
             jobs[job["_id"]] = job
 
         return Response(
-            response=json.dumps(jobs),
+            response=json.dumps({"jobs": jobs}),
             status=200,
             mimetype="application/json",
         )
