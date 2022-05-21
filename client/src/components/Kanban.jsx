@@ -9,7 +9,33 @@ function Kanban() {
   const [columnOrder, setColumnOrder] = useState([]);
 
   const onDragEnd = (result) => {
-    console.log(result);
+    const { destination, source, draggableId } = result;
+    // if reorder within list or dragged to unknown space, just return
+    if (!destination || destination.droppableId === source.droppableId) return;
+
+    // Updated the source col
+    const sourceCol = columns[source.droppableId];
+    const updatedSourceCol = Array.from(sourceCol.jobs);
+    updatedSourceCol.splice(source.index, 1);
+
+    // Update the dest col
+    const destCol = columns[destination.droppableId];
+    const updatedDestCol = Array.from(destCol.jobs);
+    updatedDestCol.push(draggableId);
+
+    // Update react state
+    const newColumns = {
+      ...columns,
+      [source.droppableId]: {
+        id: [source.droppableId],
+        jobs: updatedSourceCol,
+      },
+      [destination.droppableId]: {
+        id: [destination.droppableId],
+        jobs: updatedDestCol,
+      },
+    };
+    setColumns(newColumns);
   };
 
   useEffect(() => {
@@ -32,7 +58,7 @@ function Kanban() {
         {columnOrder.map((columnId) => {
           console.log(jobs);
           const column = columns[columnId];
-          const colJobs = column["jobs"].map((jobsId) => jobs[jobsId[1]]);
+          const colJobs = column["jobs"].map((jobsId) => jobs[jobsId]);
           return <Column key={column["id"]} column={column} jobs={colJobs} />;
         })}
       </div>

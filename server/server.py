@@ -24,7 +24,6 @@ except:
 @app.route("/api/jobs/apply", methods=["POST"])
 def createJob():
     try:
-        data = list(db.jobs.find({"status": "APPLIED"}))
         app = {
             "company": request.form["company"],
             "title": request.form["title"],
@@ -32,7 +31,6 @@ def createJob():
             "dateApplied": date.today().strftime("%d/%m/%Y"),
             "dateUpdated": date.today().strftime("%d/%m/%Y"),
             "status": "APPLIED",
-            "index": len(data),
         }
         dbResponse = db.jobs.insert_one(app)
         return Response(
@@ -86,10 +84,7 @@ def getJobsColumns():
 
         for job in list(db.jobs.find()):
             job["_id"] = str(job["_id"])
-            columns[job["status"]]["jobs"].append((job["index"], job["_id"]))
-
-        for col in columns:
-            columns[col]["jobs"].sort(key=lambda tup: tup[1])
+            columns[job["status"]]["jobs"].append(job["_id"])
 
         return Response(
             response=json.dumps({"columns": columns, "columnOrder": columnOrder}),
@@ -107,7 +102,7 @@ def getJobsColumns():
 
 # Update a single job application
 @app.route("/api/jobs/<id>", methods=["PATCH"])
-def updateJob(id):
+def updateJobStatus(id):
     try:
         dbResponse = db.jobs.update_one(
             {"_id": ObjectId(id)},
