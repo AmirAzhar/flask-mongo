@@ -1,21 +1,30 @@
 import { useEffect, useState } from "react";
 
-import {reorderApplications, moveApplication} from '../helpers/kanbanModifiers'
+import Column from "./Column";
 
 function Kanban() {
-  const [applications, setApplications] = useState([]);
+  const [jobs, setJobs] = useState([]);
   const [columns, setColumns] = useState([]);
+  const [columnOrder, setColumnOrder] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5555/api/applications")
-      .then((response) => response.json())
-      .then(({data, col}) => {
-        setApplications(data)
-        setColumns(col)
+    fetch("/api/applications")
+      .then((res) => res.json())
+      .then((res) => {
+        setJobs(res["data"]);
+        setColumns(res["columns"]);
+        setColumnOrder(res["columnOrder"]);
       });
   }, []);
 
-  return <div></div>;
+  return (
+    <div>
+      {columnOrder.map((columnId) => {
+        const jobs = columns[columnId];
+        return <Column key={columnId} title={columnId} jobs={jobs} />;
+      })}
+    </div>
+  );
 }
 
 export default Kanban;

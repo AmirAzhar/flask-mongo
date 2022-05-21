@@ -53,14 +53,17 @@ def getApplications():
     try:
         data = list(db.applications.find())
         columns = {}
+        columnOrder = ["APPLIED", "INTERVIEW", "OFFER", "REJECTED"]
         for app in data:
             app["_id"] = str(app["_id"])
             if app["status"] in columns:
-                columns[app["status"]].push(app)
+                columns[app["status"]].append(app)
             else:
                 columns[app["status"]] = [app]
         return Response(
-            response=json.dumps({"data": data, "columns": columns}),
+            response=json.dumps(
+                {"data": data, "columns": columns, "columnOrder": columnOrder}
+            ),
             status=200,
             mimetype="application/json",
         )
