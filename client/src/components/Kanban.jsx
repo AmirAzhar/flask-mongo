@@ -1,7 +1,9 @@
+// Lib
 import { useEffect, useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import axios from "axios";
 
+// Code
 import Column from "./Column";
 
 function Kanban() {

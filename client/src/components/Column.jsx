@@ -1,10 +1,13 @@
+// Lib
 import { Droppable } from "react-beautiful-dnd";
+
+// Code
 import Job from "./Job";
 
 function Column({ column, jobs }) {
   return (
     <div>
-      <div className="text-center text-lg font-bold p-2 ">{column["id"]}</div>
+      <div className="text-center text-xl font-bold p-2 ">{column["id"]}</div>
       <Droppable droppableId={column["id"]}>
         {(provided, snapshot) => (
           <div
@@ -15,10 +18,10 @@ function Column({ column, jobs }) {
             isDraggingOver={snapshot.isDraggingOver}
             {...provided.droppableProps}
           >
-            {provided.placeholder}
             {jobs.map((job, index) => (
               <Job key={job["_id"]} job={job} index={index} />
             ))}
+            {provided.placeholder}
           </div>
         )}
       </Droppable>
