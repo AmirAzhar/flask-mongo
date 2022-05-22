@@ -15,7 +15,7 @@ function Job({ job, index }) {
           isDragging={snapshot.isDragging}
         >
           <a
-            className="font-bold text-md text-blue-600"
+            className="font-bold text-md text-blue-900"
             href={job["link"]}
             target="_blank"
           >
