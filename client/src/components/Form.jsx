@@ -2,7 +2,6 @@ import axios from "axios";
 
 function Form({ showSidebar, setShowSidebar }) {
   const handleSubmit = (event) => {
-    event.preventDefault();
     const newJob = {
       company: event.target.company.value,
       title: event.target.jobTitle.value,
