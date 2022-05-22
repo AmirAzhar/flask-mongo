@@ -5,6 +5,7 @@ import axios from "axios";
 
 // Code
 import Column from "./Column";
+import Button from "./Button";
 
 function Kanban() {
   const [jobs, setJobs] = useState({});
@@ -66,6 +67,7 @@ function Kanban() {
           return <Column key={column["id"]} column={column} jobs={colJobs} />;
         })}
       </div>
+      <Button />
     </DragDropContext>
   );
 }
