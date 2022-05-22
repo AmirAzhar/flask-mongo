@@ -2,6 +2,19 @@
 import { Draggable } from "react-beautiful-dnd";
 
 function Job({ job, index }) {
+  function disableSorting(style, snapshot) {
+    if (!snapshot.isDragging) return {};
+    if (!snapshot.isDropAnimating) {
+      return style;
+    }
+
+    return {
+      ...style,
+      // cannot be 0, but make it super tiny
+      transitionDuration: `0.001s`,
+    };
+  }
+
   return (
     <Draggable draggableId={job["_id"]} index={index}>
       {(provided, snapshot) => (
@@ -13,6 +26,7 @@ function Job({ job, index }) {
           {...provided.dragHandleProps}
           ref={provided.innerRef}
           isDragging={snapshot.isDragging}
+          style={disableSorting(provided.draggableProps.style, snapshot)}
         >
           <a
             className="font-bold text-md text-blue-900"
