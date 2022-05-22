@@ -24,10 +24,11 @@ except:
 @app.route("/api/jobs/apply", methods=["POST"])
 def createJob():
     try:
+        content = request.get_json()
         app = {
-            "company": request.form["company"],
-            "title": request.form["title"],
-            "link": request.form["link"],
+            "company": content["company"],
+            "title": content["title"],
+            "link": content["link"],
             "dateApplied": date.today().strftime("%d/%m/%Y"),
             "dateUpdated": date.today().strftime("%d/%m/%Y"),
             "status": "APPLIED",
