@@ -24,19 +24,21 @@ function Form({ showSidebar, setShowSidebar }) {
         x
       </button>
       <form onSubmit={handleSubmit}>
-        <label className="flex flex-col">
-          Company
-          <input type="text" name="company" />
+        <label className="flex flex-col pb-2">
+          <div className="py-1 text-lg">Company</div>
+          <input type="text" name="company" className="rounded-md p-1" />
         </label>
-        <label className="flex flex-col">
-          Job Title
-          <input type="text" name="jobTitle" />
+        <label className="flex flex-col pb-2">
+          <div className="py-1 text-lg">Job Title</div>
+          <input type="text" name="jobTitle" className="rounded-md p-1" />
         </label>
-        <label className="flex flex-col">
-          Link
-          <input type="text" name="link" />
+        <label className="flex flex-col pb-10">
+          <div className="py-1 text-lg">Link</div>
+          <input type="text" name="link" className="rounded-md p-1" />
         </label>
-        <button className="text-center w-full">Submit</button>
+        <button className="text-center w-full p-2 text-white bg-blue-900 rounded-md opacity-100 hover:opacity-80 transition duration-300">
+          Submit
+        </button>
       </form>
     </div>
   );
