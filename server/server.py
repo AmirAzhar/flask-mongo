@@ -34,11 +34,14 @@ def createJob():
             "status": "APPLIED",
         }
         dbResponse = db.jobs.insert_one(app)
+        newJob = db.jobs.find_one({"_id": dbResponse.inserted_id})
+        newJob["_id"] = str(newJob["_id"])
+
         return Response(
             response=json.dumps(
                 {
                     "message": "Job created successfully.",
-                    "id": f"{dbResponse.inserted_id}",
+                    "newJob": newJob
                 }
             ),
             status=200,
