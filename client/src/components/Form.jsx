@@ -1,6 +1,7 @@
 // Lib
 import axios from "axios";
 import validator from "validator";
+import { XCircleIcon } from "@heroicons/react/solid";
 
 function Form({ showSidebar, setShowSidebar, setJobs, setColumns }) {
   function resetValidation() {
@@ -61,15 +62,6 @@ function Form({ showSidebar, setShowSidebar, setJobs, setColumns }) {
         showSidebar ? "translate-x-0" : "translate-x-full"
       }`}
     >
-      <button
-        className="text-right text-3xl opacity-50 hover:opacity-100 transition duration-300"
-        onClick={() => {
-          setShowSidebar(!showSidebar);
-          resetValidation();
-        }}
-      >
-        x
-      </button>
       <form onSubmit={handleSubmit}>
         <label className="flex flex-col pb-2">
           <div className="py-1 text-lg">Company</div>
@@ -83,9 +75,24 @@ function Form({ showSidebar, setShowSidebar, setJobs, setColumns }) {
           <div className="py-1 text-lg">Link</div>
           <input type="text" name="link" className="rounded-md p-1" />
         </label>
-        <button className="text-center w-full p-2 text-white bg-blue-900 rounded-md opacity-100 hover:opacity-80 transition duration-300">
-          Submit
-        </button>
+        <div className="flex gap-3">
+          <button
+            type="submit"
+            className="text-center w-full p-2 text-white bg-blue-900 rounded-md opacity-100 hover:opacity-80 transition duration-300"
+          >
+            Submit
+          </button>
+          <button
+            type="button"
+            className="text-center w-full p-2 text-white bg-red-500 rounded-md opacity-100 hover:opacity-80 transition duration-300"
+            onClick={() => {
+              setShowSidebar(!showSidebar);
+              resetValidation();
+            }}
+          >
+            Cancel
+          </button>
+        </div>
         <h1
           id="invalidCompany"
           className="hidden text-xs italic text-center text-red-600 p-1"

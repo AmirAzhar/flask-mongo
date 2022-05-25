@@ -1,5 +1,6 @@
 // Lib
 import { useState } from "react";
+import { PlusCircleIcon } from "@heroicons/react/solid";
 
 // Code
 import Form from "./Form";
@@ -8,13 +9,11 @@ function Button({ setJobs, setColumns }) {
   const [showSidebar, setShowSidebar] = useState(false);
   return (
     <div>
-      <div className="absolute bottom-0 right-0">
-        <button
+      <div className="absolute bottom-0 right-0 p-4">
+        <PlusCircleIcon
+          className="h-14 w-14 text-blue-900 cursor-pointer transform hover:scale-125 duration-300"
           onClick={() => setShowSidebar(!showSidebar)}
-          className="flex justify-center items-center bg-blue-900 rounded-full h-14 w-14 m-4 hover:scale-125 transform ease-in-out duration-300"
-        >
-          <span className="font-bold text-2xl text-white">+</span>
-        </button>
+        />
       </div>
       <Form
         setShowSidebar={setShowSidebar}
