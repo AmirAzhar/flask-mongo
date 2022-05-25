@@ -67,7 +67,7 @@ function Kanban() {
           return <Column key={column["id"]} column={column} jobs={colJobs} />;
         })}
       </div>
-      <Button />
+      <Button setJobs={setJobs} setColumns={setColumns} />
     </DragDropContext>
   );
 }

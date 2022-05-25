@@ -1,13 +1,17 @@
 import axios from "axios";
 
-function Form({ showSidebar, setShowSidebar }) {
+function Form({ showSidebar, setShowSidebar, setJobs, setColumns }) {
   const handleSubmit = (event) => {
+    event.preventDefault();
     const newJob = {
       company: event.target.company.value,
       title: event.target.jobTitle.value,
       link: event.target.link.value,
     };
-    axios.post("/api/jobs/apply", newJob);
+    axios.post("/api/jobs/apply", newJob).then(({ data }) => {
+      setColumns(data["columns"]);
+      setJobs(data["jobs"]);
+    });
 
     event.target.reset();
   };

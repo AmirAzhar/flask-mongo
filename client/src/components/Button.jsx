@@ -4,7 +4,7 @@ import { useState } from "react";
 // Code
 import Form from "./Form";
 
-function Button() {
+function Button({ setJobs, setColumns }) {
   const [showSidebar, setShowSidebar] = useState(false);
   return (
     <div>
@@ -16,7 +16,12 @@ function Button() {
           <span className="font-bold text-2xl text-white">+</span>
         </button>
       </div>
-      <Form setShowSidebar={setShowSidebar} showSidebar={showSidebar} />
+      <Form
+        setShowSidebar={setShowSidebar}
+        showSidebar={showSidebar}
+        setJobs={setJobs}
+        setColumns={setColumns}
+      />
     </div>
   );
 }
