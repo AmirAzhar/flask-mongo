@@ -1,8 +1,48 @@
+// Lib
 import axios from "axios";
+import validator from "validator";
 
 function Form({ showSidebar, setShowSidebar, setJobs, setColumns }) {
+  function resetValidation() {
+    document.getElementById("invalidCompany").classList.add("hidden");
+    document.getElementById("invalidJob").classList.add("hidden");
+    document.getElementById("invalidLink").classList.add("hidden");
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault();
+    resetValidation();
+
+    let invalidFlag = [];
+    if (!event.target.company.value.length > 0) {
+      console.log("Invalid company");
+      invalidFlag[0] = 1;
+    }
+    if (!event.target.jobTitle.value.length > 0) {
+      console.log("Invalid title");
+      invalidFlag[1] = 1;
+    }
+    if (!validator.isURL(event.target.link.value)) {
+      console.log("Invalid URL");
+      invalidFlag[2] = 1;
+    }
+
+    if (invalidFlag.length) {
+      if (invalidFlag[0]) {
+        document.getElementById("invalidCompany").classList.remove("hidden");
+        document.getElementById("invalidCompany").style.display = "visible";
+      }
+      if (invalidFlag[1]) {
+        document.getElementById("invalidJob").classList.remove("hidden");
+        document.getElementById("invalidJob").style.display = "visible";
+      }
+      if (invalidFlag[2]) {
+        document.getElementById("invalidLink").classList.remove("hidden");
+        document.getElementById("invalidLink").style.display = "visible";
+      }
+      return;
+    }
+
     const newJob = {
       company: event.target.company.value,
       title: event.target.jobTitle.value,
@@ -23,7 +63,10 @@ function Form({ showSidebar, setShowSidebar, setJobs, setColumns }) {
     >
       <button
         className="text-right text-3xl opacity-50 hover:opacity-100 transition duration-300"
-        onClick={() => setShowSidebar(!showSidebar)}
+        onClick={() => {
+          setShowSidebar(!showSidebar);
+          resetValidation();
+        }}
       >
         x
       </button>
@@ -43,6 +86,24 @@ function Form({ showSidebar, setShowSidebar, setJobs, setColumns }) {
         <button className="text-center w-full p-2 text-white bg-blue-900 rounded-md opacity-100 hover:opacity-80 transition duration-300">
           Submit
         </button>
+        <h1
+          id="invalidCompany"
+          className="hidden text-xs italic text-center text-red-600 p-1"
+        >
+          Invalid Company (must be at least 1 character)
+        </h1>
+        <h1
+          id="invalidJob"
+          className="hidden text-xs italic text-center text-red-600 p-1"
+        >
+          Invalid Job Title (must be at least 1 character)
+        </h1>
+        <h1
+          id="invalidLink"
+          className="hidden text-xs italic text-center text-red-600 p-1"
+        >
+          Invalid Link (must begin with http[s]:// or www)
+        </h1>
       </form>
     </div>
   );
