@@ -20,11 +20,37 @@ except:
 
 ################################################################
 
+def getAllJobsHelper():
+    jobs = {}
+    jobsList = list(db.jobs.find())
+    for job in jobsList:
+        job["_id"] = str(job["_id"])
+        jobs[job["_id"]] = job
+    
+    return jobs
+    
+def getJobsColumnsHelper():
+    columns = {
+        "APPLIED": {"id": "APPLIED", "jobs": []},
+        "INTERVIEW": {"id": "INTERVIEW", "jobs": []},
+        "OFFER": {"id": "OFFER", "jobs": []},
+        "REJECTED": {"id": "REJECTED", "jobs": []},
+    }
+    columnOrder = ["APPLIED", "INTERVIEW", "OFFER", "REJECTED"]
+
+    for job in list(db.jobs.find()):
+        job["_id"] = str(job["_id"])
+        columns[job["status"]]["jobs"].append(job["_id"])
+    
+    return columns, columnOrder
+    
+
 # Create a new job application
 @app.route("/api/jobs/apply", methods=["POST"])
 def createJob():
     try:
         content = request.get_json()
+        print(request)
         app = {
             "company": content["company"],
             "title": content["title"],
@@ -36,12 +62,19 @@ def createJob():
         dbResponse = db.jobs.insert_one(app)
         newJob = db.jobs.find_one({"_id": dbResponse.inserted_id})
         newJob["_id"] = str(newJob["_id"])
-
+        
+        
+        jobs = getAllJobsHelper()
+        columns, columnOrder = getJobsColumnsHelper()
+        
         return Response(
             response=json.dumps(
                 {
                     "message": "Job created successfully.",
-                    "newJob": newJob
+                    "newJob": newJob,
+                    "jobs": jobs,
+                    "columns": columns,
+                    "columnOrder": columnOrder
                 }
             ),
             status=200,
@@ -55,10 +88,7 @@ def createJob():
 @app.route("/api/jobs/all", methods=["GET"])
 def getAllJobs():
     try:
-        jobs = {}
-        for job in list(db.jobs.find()):
-            job["_id"] = str(job["_id"])
-            jobs[job["_id"]] = job
+        jobs = getAllJobsHelper()
 
         return Response(
             response=json.dumps({"jobs": jobs}),
@@ -78,17 +108,7 @@ def getAllJobs():
 @app.route("/api/jobs/columns", methods=["GET"])
 def getJobsColumns():
     try:
-        columns = {
-            "APPLIED": {"id": "APPLIED", "jobs": []},
-            "INTERVIEW": {"id": "INTERVIEW", "jobs": []},
-            "OFFER": {"id": "OFFER", "jobs": []},
-            "REJECTED": {"id": "REJECTED", "jobs": []},
-        }
-        columnOrder = ["APPLIED", "INTERVIEW", "OFFER", "REJECTED"]
-
-        for job in list(db.jobs.find()):
-            job["_id"] = str(job["_id"])
-            columns[job["status"]]["jobs"].append(job["_id"])
+        columns, columnOrder = getJobsColumnsHelper()
 
         return Response(
             response=json.dumps({"columns": columns, "columnOrder": columnOrder}),
