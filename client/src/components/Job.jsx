@@ -50,8 +50,8 @@ function Job({ job, index }) {
               onClick={() => showTooltip(!tooltip)}
             />
             {tooltip && (
-              <div className="z-10 absolute w-80 h-20 right-0 top-5 bg-gray-200 rounded-md p-2">
-                <h1>Description</h1>
+              <div className="z-10 absolute w-fit h-fit right-0 top-5 bg-gray-200 rounded-md p-2">
+                <h1>Remarks</h1>
               </div>
             )}
           </div>
