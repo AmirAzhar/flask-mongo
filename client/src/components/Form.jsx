@@ -1,7 +1,6 @@
 // Lib
 import axios from "axios";
 import validator from "validator";
-import { XCircleIcon } from "@heroicons/react/solid";
 
 function Form({ showSidebar, setShowSidebar, setJobs, setColumns }) {
   function resetValidation() {

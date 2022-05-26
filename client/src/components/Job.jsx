@@ -1,7 +1,12 @@
 // Lib
 import { Draggable } from "react-beautiful-dnd";
+import { InformationCircleIcon } from "@heroicons/react/solid";
+import { useState } from "react";
 
 function Job({ job, index }) {
+  const [tooltip, showTooltip] = useState(false);
+  console.log(tooltip);
+
   function disableSorting(style, snapshot) {
     if (!snapshot.isDragging) return {};
     if (!snapshot.isDropAnimating) {
@@ -28,13 +33,24 @@ function Job({ job, index }) {
           isDragging={snapshot.isDragging}
           style={disableSorting(provided.draggableProps.style, snapshot)}
         >
-          <a
-            className="font-bold text-md text-blue-900"
-            href={job["link"]}
-            target="_blank"
-          >
-            {job["title"]}
-          </a>
+          <div className="flex justify-between relative">
+            <a
+              className="font-bold text-md text-blue-900"
+              href={job["link"]}
+              target="_blank"
+            >
+              {job["title"]}
+            </a>
+            <InformationCircleIcon
+              className="h-4 w-4 text-gray-300 cursor-pointer"
+              onClick={() => showTooltip(!tooltip)}
+            />
+            {tooltip && (
+              <div className="z-10 absolute w-80 h-20 right-0 top-5 bg-gray-200 rounded-md p-2">
+                <h1>Description</h1>
+              </div>
+            )}
+          </div>
           <h1>{job["company"]}</h1>
           <h1 className="text-right text-xs italic">
             Updated {job["dateUpdated"]}
