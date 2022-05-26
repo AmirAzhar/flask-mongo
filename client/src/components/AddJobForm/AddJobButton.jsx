@@ -3,9 +3,9 @@ import { useState } from "react";
 import { PlusCircleIcon } from "@heroicons/react/solid";
 
 // Code
-import Form from "./Form";
+import AddJobForm from "./AddJobForm";
 
-function Button({ setJobs, setColumns }) {
+function AddJobButton({ setJobs, setColumns }) {
   const [showSidebar, setShowSidebar] = useState(false);
   return (
     <div>
@@ -15,7 +15,7 @@ function Button({ setJobs, setColumns }) {
           onClick={() => setShowSidebar(!showSidebar)}
         />
       </div>
-      <Form
+      <AddJobForm
         setShowSidebar={setShowSidebar}
         showSidebar={showSidebar}
         setJobs={setJobs}
@@ -25,4 +25,4 @@ function Button({ setJobs, setColumns }) {
   );
 }
 
-export default Button;
+export default AddJobButton;

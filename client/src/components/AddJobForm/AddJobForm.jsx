@@ -1,44 +1,14 @@
 // Lib
 import axios from "axios";
-import validator from "validator";
 
-function Form({ showSidebar, setShowSidebar, setJobs, setColumns }) {
-  function resetValidation() {
-    document.getElementById("invalidCompany").classList.add("hidden");
-    document.getElementById("invalidJob").classList.add("hidden");
-    document.getElementById("invalidLink").classList.add("hidden");
-    document.getElementById("invalidRemarks").classList.add("hidden");
-  }
+import resetFormValidation from "./helpers/resetFormValidation";
+import showFormErrors from "./helpers/showFormErrors";
 
+function AddJobForm({ showSidebar, setShowSidebar, setJobs, setColumns }) {
   const handleSubmit = (event) => {
     event.preventDefault();
-    resetValidation();
-
-    let invalidFlag = [];
-    if (!event.target.company.value.length > 0) invalidFlag[0] = 1;
-    if (!event.target.jobTitle.value.length > 0) invalidFlag[1] = 1;
-    if (!validator.isURL(event.target.link.value)) invalidFlag[2] = 1;
-    if (event.target.remarks.value.length > 100) invalidFlag[3] = 1;
-
-    if (invalidFlag.length) {
-      if (invalidFlag[0]) {
-        document.getElementById("invalidCompany").classList.remove("hidden");
-        document.getElementById("invalidCompany").style.display = "visible";
-      }
-      if (invalidFlag[1]) {
-        document.getElementById("invalidJob").classList.remove("hidden");
-        document.getElementById("invalidJob").style.display = "visible";
-      }
-      if (invalidFlag[2]) {
-        document.getElementById("invalidLink").classList.remove("hidden");
-        document.getElementById("invalidLink").style.display = "visible";
-      }
-      if (invalidFlag[3]) {
-        document.getElementById("invalidRemarks").classList.remove("hidden");
-        document.getElementById("invalidRemarks").style.display = "visible";
-      }
-      return;
-    }
+    resetFormValidation();
+    if (showFormErrors(event)) return;
 
     const newJob = {
       company: event.target.company.value,
@@ -92,7 +62,7 @@ function Form({ showSidebar, setShowSidebar, setJobs, setColumns }) {
             className="text-center w-full p-2 text-white bg-red-500 rounded-md opacity-100 hover:opacity-80 transition duration-300"
             onClick={() => {
               setShowSidebar(!showSidebar);
-              resetValidation();
+              resetFormValidation();
             }}
           >
             Cancel
@@ -127,4 +97,4 @@ function Form({ showSidebar, setShowSidebar, setJobs, setColumns }) {
   );
 }
 
-export default Form;
+export default AddJobForm;

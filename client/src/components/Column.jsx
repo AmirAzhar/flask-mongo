@@ -2,7 +2,7 @@
 import { Droppable } from "react-beautiful-dnd";
 
 // Code
-import Job from "./Job";
+import JobCard from "./JobCard/JobCard";
 
 function Column({ column, jobs }) {
   return (
@@ -19,7 +19,7 @@ function Column({ column, jobs }) {
             {...provided.droppableProps}
           >
             {jobs.map((job, index) => (
-              <Job key={job["_id"]} job={job} index={index} />
+              <JobCard key={job["_id"]} job={job} index={index} />
             ))}
             {provided.placeholder}
           </div>
