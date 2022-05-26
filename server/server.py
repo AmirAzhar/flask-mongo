@@ -55,6 +55,7 @@ def createJob():
             "company": content["company"],
             "title": content["title"],
             "link": content["link"],
+            "remarks": content["remarks"],
             "dateApplied": date.today().strftime("%d/%m/%Y"),
             "dateUpdated": date.today().strftime("%d/%m/%Y"),
             "status": "APPLIED",

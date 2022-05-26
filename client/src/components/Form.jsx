@@ -7,6 +7,7 @@ function Form({ showSidebar, setShowSidebar, setJobs, setColumns }) {
     document.getElementById("invalidCompany").classList.add("hidden");
     document.getElementById("invalidJob").classList.add("hidden");
     document.getElementById("invalidLink").classList.add("hidden");
+    document.getElementById("invalidRemarks").classList.add("hidden");
   }
 
   const handleSubmit = (event) => {
@@ -14,18 +15,10 @@ function Form({ showSidebar, setShowSidebar, setJobs, setColumns }) {
     resetValidation();
 
     let invalidFlag = [];
-    if (!event.target.company.value.length > 0) {
-      console.log("Invalid company");
-      invalidFlag[0] = 1;
-    }
-    if (!event.target.jobTitle.value.length > 0) {
-      console.log("Invalid title");
-      invalidFlag[1] = 1;
-    }
-    if (!validator.isURL(event.target.link.value)) {
-      console.log("Invalid URL");
-      invalidFlag[2] = 1;
-    }
+    if (!event.target.company.value.length > 0) invalidFlag[0] = 1;
+    if (!event.target.jobTitle.value.length > 0) invalidFlag[1] = 1;
+    if (!validator.isURL(event.target.link.value)) invalidFlag[2] = 1;
+    if (event.target.remarks.value.length > 100) invalidFlag[3] = 1;
 
     if (invalidFlag.length) {
       if (invalidFlag[0]) {
@@ -40,6 +33,10 @@ function Form({ showSidebar, setShowSidebar, setJobs, setColumns }) {
         document.getElementById("invalidLink").classList.remove("hidden");
         document.getElementById("invalidLink").style.display = "visible";
       }
+      if (invalidFlag[3]) {
+        document.getElementById("invalidRemarks").classList.remove("hidden");
+        document.getElementById("invalidRemarks").style.display = "visible";
+      }
       return;
     }
 
@@ -47,6 +44,7 @@ function Form({ showSidebar, setShowSidebar, setJobs, setColumns }) {
       company: event.target.company.value,
       title: event.target.jobTitle.value,
       link: event.target.link.value,
+      remarks: event.target.remarks.value,
     };
     axios.post("/api/jobs/apply", newJob).then(({ data }) => {
       setColumns(data["columns"]);
@@ -70,9 +68,17 @@ function Form({ showSidebar, setShowSidebar, setJobs, setColumns }) {
           <div className="py-1 text-lg">Job Title</div>
           <input type="text" name="jobTitle" className="rounded-md p-1" />
         </label>
-        <label className="flex flex-col pb-10">
+        <label className="flex flex-col pb-2">
           <div className="py-1 text-lg">Link</div>
           <input type="text" name="link" className="rounded-md p-1" />
+        </label>
+        <label className="flex flex-col pb-10">
+          <div className="text-lg">Remarks</div>
+          <textarea
+            type="text"
+            name="remarks"
+            className="rounded-md p-1 max-h-52"
+          />
         </label>
         <div className="flex gap-3">
           <button
@@ -109,6 +115,12 @@ function Form({ showSidebar, setShowSidebar, setJobs, setColumns }) {
           className="hidden text-xs italic text-center text-red-600 p-1"
         >
           Invalid Link (must begin with http[s]:// or www)
+        </h1>
+        <h1
+          id="invalidRemarks"
+          className="hidden text-xs italic text-center text-red-600 p-1"
+        >
+          Remarks cannot be longer than 100 characters
         </h1>
       </form>
     </div>
