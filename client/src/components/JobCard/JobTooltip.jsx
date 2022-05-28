@@ -9,7 +9,7 @@ function JobTooltip({ job, setJobs, jobs }) {
   const [disableEdit, setDisableEdit] = useState(true);
 
   const updateRemarks = async () => {
-    const remarks = document.getElementById("remarksEdit").value;
+    const remarks = document.getElementById(`remarksEdit_${job["_id"]}`).value;
     if (remarks === job["remarks"]) return;
     await axios.patch(`/api/jobs/remarks/${job["_id"]}`, {
       remarks: remarks,
@@ -23,8 +23,9 @@ function JobTooltip({ job, setJobs, jobs }) {
   const setEditHandler = () => {
     if (edit) updateRemarks();
 
-    document.getElementById("remarksEdit").disabled = !disableEdit;
-    document.getElementById("remarksEdit").style.resize = edit
+    document.getElementById(`remarksEdit_${job["_id"]}`).disabled =
+      !disableEdit;
+    document.getElementById(`remarksEdit_${job["_id"]}`).style.resize = edit
       ? "none"
       : "vertical";
     setDisableEdit(!disableEdit);
@@ -50,7 +51,7 @@ function JobTooltip({ job, setJobs, jobs }) {
           </div>
           <textarea
             disabled
-            id="remarksEdit"
+            id={`remarksEdit_${job["_id"]}`}
             className="focus:border-none text-sm focus:outline-none rounded-sm p-1 max-h-20 h-16"
             style={{ resize: "none" }}
           >
