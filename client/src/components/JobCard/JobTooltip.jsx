@@ -38,7 +38,7 @@ function JobTooltip({ job, setJobs, jobs }) {
         onClick={() => showTooltip(!tooltip)}
       />
       {tooltip && (
-        <div className="z-10 absolute w-fit h-fit max-w-xs right-0 top-5 bg-gray-200 rounded-md p-2">
+        <div className="z-10 absolute w-fit h-fit max-w-xs right-0 top-5 bg-gray-200 rounded-md p-2 my-2">
           <div className="flex justify-between p-1">
             <h1 className="font-bold text-sm">Remarks</h1>
             <h1
