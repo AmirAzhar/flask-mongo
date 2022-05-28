@@ -1,24 +1,34 @@
+// Lib
 import { useState } from "react";
 import { InformationCircleIcon } from "@heroicons/react/solid";
 import axios from "axios";
 
-function JobTooltip({ job }) {
+function JobTooltip({ job, setJobs, jobs }) {
   const [tooltip, showTooltip] = useState(false);
   const [edit, setEdit] = useState(false);
   const [disableEdit, setDisableEdit] = useState(true);
 
-  const setEditHandler = () => {
-    if (edit) {
-      const remarks = document.getElementById("remarksEdit").value;
-      console.log(job["id"]);
-      axios.patch(`/api/jobs/remarks/${job["_id"]}`, {
-        remarks: remarks,
-      });
-    }
+  const updateRemarks = async () => {
+    const remarks = document.getElementById("remarksEdit").value;
+    if (remarks === job["remarks"]) return;
+    await axios.patch(`/api/jobs/remarks/${job["_id"]}`, {
+      remarks: remarks,
+    });
 
-    setEdit(!edit);
+    // const updatedJob = { ...job, remarks: remarks };
+    // const filteredJobs = jobs.filter((job) => job["_id"] !== updatedJob["_id"]);
+    // setJobs(...filteredJobs, updatedJob);
+  };
+
+  const setEditHandler = () => {
+    if (edit) updateRemarks();
+
     document.getElementById("remarksEdit").disabled = !disableEdit;
+    document.getElementById("remarksEdit").style.resize = edit
+      ? "none"
+      : "vertical";
     setDisableEdit(!disableEdit);
+    setEdit(!edit);
   };
 
   return (
@@ -42,6 +52,7 @@ function JobTooltip({ job }) {
             disabled
             id="remarksEdit"
             className="focus:border-none text-sm focus:outline-none rounded-sm p-1 max-h-20 h-16"
+            style={{ resize: "none" }}
           >
             {job["remarks"]}
           </textarea>

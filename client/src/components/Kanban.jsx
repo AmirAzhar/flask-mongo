@@ -12,7 +12,7 @@ function Kanban() {
   const [columns, setColumns] = useState({});
   const [columnOrder, setColumnOrder] = useState([]);
 
-  const onDragEnd = (result) => {
+  const onDragEnd = async (result) => {
     const { destination, source, draggableId } = result;
     // if reorder within list or dragged to unknown space, just return
     if (!destination || destination.droppableId === source.droppableId) return;
@@ -42,7 +42,7 @@ function Kanban() {
     setColumns(newColumns);
 
     // Update on mongo database
-    axios.patch(`/api/jobs/status/${draggableId}`, {
+    await axios.patch(`/api/jobs/status/${draggableId}`, {
       status: destination.droppableId,
     });
   };
@@ -63,7 +63,14 @@ function Kanban() {
         {columnOrder.map((columnId) => {
           const column = columns[columnId];
           const colJobs = column["jobs"].map((jobsId) => jobs[jobsId]);
-          return <Column key={column["id"]} column={column} jobs={colJobs} />;
+          return (
+            <Column
+              key={column["id"]}
+              column={column}
+              jobs={colJobs}
+              setJobs={setJobs}
+            />
+          );
         })}
       </div>
       <AddJobButton setJobs={setJobs} setColumns={setColumns} />

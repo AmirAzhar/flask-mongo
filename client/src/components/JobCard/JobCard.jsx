@@ -8,7 +8,7 @@ import JobTitle from "./JobTitle";
 // Components
 import JobTooltip from "./JobTooltip";
 
-function JobCard({ job, index }) {
+function JobCard({ job, index, setJobs, jobs }) {
   return (
     <Draggable draggableId={job["_id"]} index={index}>
       {(provided, snapshot) => (
@@ -24,7 +24,7 @@ function JobCard({ job, index }) {
         >
           <div className="flex justify-between relative">
             <JobTitle job={job} />
-            <JobTooltip job={job} />
+            <JobTooltip job={job} setJobs={setJobs} jobs={jobs} />
           </div>
           <h1>{job["company"]}</h1>
           <h1 className="text-right text-xs italic">
