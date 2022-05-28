@@ -42,10 +42,9 @@ function Kanban() {
     setColumns(newColumns);
 
     // Update on mongo database
-    axios.patch(
-      `/api/jobs/${draggableId}`,
-      `status=${destination.droppableId}`
-    );
+    axios.patch(`/api/jobs/status/${draggableId}`, {
+      status: destination.droppableId,
+    });
   };
 
   useEffect(() => {

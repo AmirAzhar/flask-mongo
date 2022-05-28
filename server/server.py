@@ -50,7 +50,6 @@ def getJobsColumnsHelper():
 def createJob():
     try:
         content = request.get_json()
-        print(request)
         app = {
             "company": content["company"],
             "title": content["title"],
@@ -126,15 +125,46 @@ def getJobsColumns():
 
 
 # Update a single job application
-@app.route("/api/jobs/<id>", methods=["PATCH"])
+@app.route("/api/jobs/status/<id>", methods=["PATCH"])
 def updateJobStatus(id):
     try:
+        content = request.get_json()
         dbResponse = db.jobs.update_one(
             {"_id": ObjectId(id)},
             {
                 "$set": {
-                    "status": request.form["status"],
+                    "status": content['status'],
                     "dateUpdated": date.today().strftime("%d/%m/%Y"),
+                }
+            },
+        )
+        return Response(
+            response=json.dumps(
+                {
+                    "message": "Job successfully updated.",
+                    "id": f"{id}",
+                }
+            ),
+            status=200,
+            mimetype="application/json",
+        )
+    except Exception as e:
+        print(e)
+        return Response(
+            response=json.dumps({"message": "Cannot update job."}),
+            status=500,
+            mimetype="application/json",
+        )
+
+@app.route("/api/jobs/remarks/<id>", methods=["PATCH"])
+def updateJobRemarks(id):
+    try:
+        content = request.get_json()
+        dbResponse = db.jobs.update_one(
+            {"_id": ObjectId(id)},
+            {
+                "$set": {
+                    "remarks": content['remarks'],
                 }
             },
         )

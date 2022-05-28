@@ -24,7 +24,7 @@ function JobCard({ job, index }) {
         >
           <div className="flex justify-between relative">
             <JobTitle job={job} />
-            <JobTooltip remarks={job["remarks"]} />
+            <JobTooltip job={job} />
           </div>
           <h1>{job["company"]}</h1>
           <h1 className="text-right text-xs italic">
