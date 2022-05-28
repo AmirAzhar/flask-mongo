@@ -5,9 +5,18 @@ import { Droppable } from "react-beautiful-dnd";
 import JobCard from "./JobCard/JobCard";
 
 function Column({ column, jobs, setJobs }) {
+  const columnMap = {
+    APPLIED: "✅ Applied ✅",
+    INTERVIEW: "📹 Interview 📹",
+    OFFER: "🎉 Offer🎉",
+    REJECTED: "🥺 Rejected 🥺",
+  };
+
   return (
     <div className="flex flex-col items-center">
-      <div className="text-center text-xl font-bold p-2 ">{column["id"]}</div>
+      <div className="text-center text-3xl font-bold p-4 ">
+        {columnMap[column["id"]]}
+      </div>
       <Droppable droppableId={column["id"]}>
         {(provided, snapshot) => (
           <div
