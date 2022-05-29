@@ -6,6 +6,7 @@ import axios from "axios";
 // Code
 import Column from "./Column";
 import AddJobButton from "./AddJobForm/AddJobButton";
+import DeleteJob from "./DeleteJob";
 
 function Kanban() {
   const [jobs, setJobs] = useState({});
@@ -14,8 +15,14 @@ function Kanban() {
 
   const onDragEnd = async (result) => {
     const { destination, source, draggableId } = result;
+    console.log(destination);
     // if reorder within list or dragged to unknown space, just return
     if (!destination || destination.droppableId === source.droppableId) return;
+
+    // Delete item
+    if (destination.droppableId === "DELETE") {
+      console.log("DELETE ITEM");
+    }
 
     // Updated the source col
     const sourceCol = columns[source.droppableId];
@@ -59,21 +66,24 @@ function Kanban() {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className="flex justify-evenly m-5">
-        {columnOrder.map((columnId) => {
-          const column = columns[columnId];
-          const colJobs = column["jobs"].map((jobsId) => jobs[jobsId]);
-          return (
-            <Column
-              key={column["id"]}
-              column={column}
-              jobs={colJobs}
-              setJobs={setJobs}
-            />
-          );
-        })}
+      <div className="h-screen w-screen ">
+        <div className="flex justify-evenly mx-5">
+          {columnOrder.map((columnId) => {
+            const column = columns[columnId];
+            const colJobs = column["jobs"].map((jobsId) => jobs[jobsId]);
+            return (
+              <Column
+                key={column["id"]}
+                column={column}
+                jobs={colJobs}
+                setJobs={setJobs}
+              />
+            );
+          })}
+        </div>
+        <DeleteJob />
+        <AddJobButton setJobs={setJobs} setColumns={setColumns} />
       </div>
-      <AddJobButton setJobs={setJobs} setColumns={setColumns} />
     </DragDropContext>
   );
 }
