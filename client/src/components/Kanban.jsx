@@ -22,6 +22,7 @@ function Kanban() {
     // Delete item
     if (destination.droppableId === "DELETE") {
       console.log("DELETE ITEM");
+      return;
     }
 
     // Updated the source col
