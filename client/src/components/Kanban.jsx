@@ -15,7 +15,6 @@ function Kanban() {
 
   const onDragEnd = async (result) => {
     const { destination, source, draggableId } = result;
-    console.log(destination);
     // if reorder within list or dragged to unknown space, just return
     if (!destination || destination.droppableId === source.droppableId) return;
 
@@ -67,7 +66,7 @@ function Kanban() {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div className="h-screen w-screen ">
+      <div>
         <div className="flex justify-evenly mx-5">
           {columnOrder.map((columnId) => {
             const column = columns[columnId];
@@ -81,8 +80,8 @@ function Kanban() {
               />
             );
           })}
+          <DeleteJob />
         </div>
-        <DeleteJob />
         <AddJobButton setJobs={setJobs} setColumns={setColumns} />
       </div>
     </DragDropContext>

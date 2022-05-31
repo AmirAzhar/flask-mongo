@@ -16,7 +16,6 @@ function DeleteJob() {
           {...provided.droppableProps}
         >
           <div className=" text-gray-300 text-center">Delete</div>
-          {provided.placeholder}
         </div>
       )}
     </Droppable>
