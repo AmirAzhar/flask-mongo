@@ -21,6 +21,24 @@ function Kanban() {
     // Delete item
     if (destination.droppableId === "DELETE") {
       console.log("DELETE ITEM");
+
+      // Updated the source col
+      const sourceCol = columns[source.droppableId];
+      const updatedSourceCol = Array.from(sourceCol.jobs);
+      updatedSourceCol.splice(source.index, 1);
+
+      // Update react state
+      const newColumns = {
+        ...columns,
+        [source.droppableId]: {
+          id: [source.droppableId],
+          jobs: updatedSourceCol,
+        },
+      };
+      setColumns(newColumns);
+
+      // Update on mongo
+      await axios.delete(`/api/jobs/${draggableId}`);
       return;
     }
 
@@ -82,6 +100,7 @@ function Kanban() {
           })}
           <DeleteJob />
         </div>
+
         <AddJobButton setJobs={setJobs} setColumns={setColumns} />
       </div>
     </DragDropContext>
