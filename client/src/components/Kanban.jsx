@@ -20,8 +20,6 @@ function Kanban() {
 
     // Delete item
     if (destination.droppableId === "DELETE") {
-      console.log("DELETE ITEM");
-
       // Updated the source col
       const sourceCol = columns[source.droppableId];
       const updatedSourceCol = Array.from(sourceCol.jobs);
